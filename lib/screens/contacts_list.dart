@@ -32,3 +32,4 @@ class ContactsList extends StatelessWidget {
     );
   }
 }
+
