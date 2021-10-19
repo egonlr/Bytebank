@@ -14,19 +14,28 @@ class ContactsList extends StatelessWidget {
           title: Text('Contacts'),
         ),
         body: FutureBuilder<List<Contact>>(
-                future: findAll(),
+                future: Future.delayed(Duration(seconds: 1)).then((value) => findAll()),
+                initialData: [],
                 builder: (context, snapshot) {
                   final List<Contact>? contacts = snapshot.data; // usado null safe na lista pois é regra da nova versão do flutter
-                  if (contacts != null) { //feito if para validar nulo
-                    return ListView.builder(
+                      return ListView.builder(
                       itemBuilder: (context, index) {
-                        final Contact contact = contacts[index];
+                        final Contact contact = contacts![index];
                         return _ContactItem(contact);
                       },
-                    itemCount: contacts.length,
+                    itemCount: contacts!.length,
                     );
-                 }
-        return Container();
+
+        return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Text('Loading'),
+                      ],
+                    ),
+                  );
          },
         ),
       floatingActionButton: FloatingActionButton(

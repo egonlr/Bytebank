@@ -7,8 +7,6 @@ import 'screens/dashboard.dart';
 
 void main() {
   runApp(BytebankApp());
-  save(Contact(7, 'Fran', 1000));
-
 }
 
 class BytebankApp extends StatelessWidget {
