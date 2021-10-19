@@ -1,3 +1,4 @@
+import 'package:bytebank/database/app_database.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,21 +6,28 @@ import 'package:flutter/material.dart';
 
 class ContactsList extends StatelessWidget {
 
-  final List<Contact> contacts = [];
-
   @override
   Widget build(BuildContext context) {
-    contacts.add(Contact(0, 'alex', 1009));
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Contacts'),
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            final Contact contact = contacts[index];
-            return _ContactItem(contact);
-          },
-          itemCount: contacts.length,
+        body: FutureBuilder<List<Contact>>(
+                future: findAll(),
+                builder: (context, snapshot) {
+                  final List<Contact>? contacts = snapshot.data; // usado null safe na lista pois é regra da nova versão do flutter
+                  if (contacts != null) { //feito if para validar nulo
+                    return ListView.builder(
+                      itemBuilder: (context, index) {
+                        final Contact contact = contacts[index];
+                        return _ContactItem(contact);
+                      },
+                    itemCount: contacts.length,
+                    );
+                 }
+        return Container();
+         },
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
