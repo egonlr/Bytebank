@@ -14,29 +14,42 @@ class ContactsList extends StatelessWidget {
           title: Text('Contacts'),
         ),
         body: FutureBuilder<List<Contact>>(
-                future: Future.delayed(Duration(seconds: 1)).then((value) => findAll()),
+                future: findAll(),
                 initialData: [],
                 builder: (context, snapshot) {
-                  final List<Contact>? contacts = snapshot.data; // usado null safe na lista pois é regra da nova versão do flutter
-                      return ListView.builder(
-                      itemBuilder: (context, index) {
-                        final Contact contact = contacts![index];
-                        return _ContactItem(contact);
-                      },
-                    itemCount: contacts!.length,
-                    );
 
-        return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CircularProgressIndicator(),
-                        Text('Loading'),
-                      ],
-                    ),
-                  );
-         },
+                  switch(snapshot.connectionState) {
+
+                    case ConnectionState.none:
+                      // TODO: Handle this case.
+                      break;
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CircularProgressIndicator(),
+                            Text('Loading'),
+                          ],
+                        ),
+                      );
+                      break;
+                    case ConnectionState.active:
+                      break;
+                    case ConnectionState.done:
+                      final List<Contact>? contacts = snapshot.data; // usado null safe na lista pois é regra da nova versão do flutter
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          final Contact contact = contacts![index];
+                          return _ContactItem(contact);
+                        },
+                        itemCount: contacts!.length,
+                      );
+                      break;
+                  }
+                  return Text('Unknown error');
+          },
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
