@@ -10,7 +10,9 @@ Future<Database> createDatabase() {
               'id INTEGER PRIMARY KEY, '
               'name TEXT, '
               'account_number INTEGER)');
-    }, version: 1);
+    }, //onDowngrade: onDatabaseDowngradeDelete,  --> Para apagar o banco de dados
+      version: 1,
+    );
   });
 }
 

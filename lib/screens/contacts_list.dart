@@ -5,68 +5,66 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Contacts'),
-        ),
-        body: FutureBuilder<List<Contact>>(
-                future: findAll(),
-                initialData: [],
-                builder: (context, snapshot) {
-
-                  switch(snapshot.connectionState) {
-
-                    case ConnectionState.none:
-                      // TODO: Handle this case.
-                      break;
-                    case ConnectionState.waiting:
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircularProgressIndicator(),
-                            Text('Loading'),
-                          ],
-                        ),
-                      );
-                      break;
-                    case ConnectionState.active:
-                      break;
-                    case ConnectionState.done:
-                      final List<Contact>? contacts = snapshot.data; // usado null safe na lista pois é regra da nova versão do flutter
-                      return ListView.builder(
-                        itemBuilder: (context, index) {
-                          final Contact contact = contacts![index];
-                          return _ContactItem(contact);
-                        },
-                        itemCount: contacts!.length,
-                      );
-                      break;
-                  }
-                  return Text('Unknown error');
-          },
-        ),
+      appBar: AppBar(
+        title: Text('Contacts'),
+      ),
+      body: FutureBuilder<List<Contact>>(
+        future: findAll(),
+        initialData: [],
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              // TODO: Handle this case.
+              break;
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text('Loading'),
+                  ],
+                ),
+              );
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              final List<Contact>? contacts = snapshot
+                  .data; // usado null safe na lista pois é regra da nova versão do flutter
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final Contact contact = contacts![index];
+                  return _ContactItem(contact);
+                },
+                itemCount: contacts!.length,
+              );
+              break;
+          }
+          return Text('Unknown error');
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContactForm(),
-          ),
-          ).then((newContact) => debugPrint(newContact.toString()),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ContactForm(),
+            ),
           );
         },
-        child: Icon(Icons.add,
+        child: Icon(
+          Icons.add,
         ),
       ),
     );
   }
 }
 
-class _ContactItem extends StatelessWidget{
-
+class _ContactItem extends StatelessWidget {
   final Contact contact;
 
   _ContactItem(this.contact);
@@ -74,7 +72,7 @@ class _ContactItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  Card(
+    return Card(
       child: ListTile(
         title: Text(
           contact.name,
@@ -85,9 +83,6 @@ class _ContactItem extends StatelessWidget{
           style: TextStyle(fontSize: 16.0),
         ),
       ),
-    )
-    ;
+    );
   }
-
 }
-
